@@ -8,10 +8,10 @@ app = Flask(__name__)
 
 @app.route('/download', methods=['POST'])
 def download():
-    args = request.json['args'] # The YoutubeDL command.
-    user = request.json['user'] # The user submitting the download request.
+    args = request.json['args']
+    user = request.json['user']
     session = YTDLSession(args, user)
-    execution = session._download() # This returns a dict 
+    execution = session._download()
     if execution['msg'] == 'Success!':
         return send_file(f'./{execution["file"]}', attachment_filename=execution['file'])
     else:
