@@ -1,22 +1,26 @@
 import hashlib
 import youtube_dl
 import shlex, subprocess
+from utils import is_safe
 
 class YTDLSession:
 
-    def __init__(self, params, session_user):
+    def __init__(self, params : str, session_user : str):
         self.params = params
         self.session_user = session_user
         self.session_id = hashlib.sha256(str.encode(session_user)).hexdigest()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'YTDLSession("{self.params}", "{self.session_user}") with Session ID <{self.session_id}>'
 
-    def _download(self):
+    def _download(self) -> dict:
         download_args = shlex.split(self.params)
-        if download_args[0] == 'youtube-dl':
+        if is_safe(download_args) == True:
             execution = subprocess.check_output(download_args) # Need to make sure this is safe!
             file_name = execution.decode('utf-8').split('[ffmpeg] Destination: ')[1].split('\n')[0]
             return {'msg':'Success!', 'file':file_name}
         else:
-            return {'msg':'Non Youtube-DL command not allowed. Use a valid Youtube-DL command.'}
+            return {'msg':'Non Youtube-DL command/option not allowed. Use a valid Youtube-DL command/option.'}
+
+    def store_session(self):
+        pass
