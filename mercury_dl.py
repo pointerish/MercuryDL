@@ -15,7 +15,7 @@ class YTDLSession:
         self.ses_token = hashlib.sha256(str.encode(self.api_token)).hexdigest()
 
     def __str__(self) -> str:
-        return f'YTDLSession("{self.params}", "{self.session_user}") with Session ID <{self.session_id}>'
+        return f'YTDLSession("{self.params}", "{self.api_token}") with Session ID <{self.ses_token}>'
 
     def _download(self) -> dict:
         download_args = shlex.split(self.params)
