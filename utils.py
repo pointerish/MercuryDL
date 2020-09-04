@@ -1,6 +1,9 @@
 # Utilities
 
+import os
 import re
+import uuid
+import yagmail
 
 
 def is_safe(args: list) -> bool:
@@ -43,3 +46,15 @@ def is_email(email : str) -> bool:
         return True
     else:
         return False
+
+def generate_api_key():
+    return uuid.uuid4().hex
+
+def send_apikey_email(email: str, api_key: str) -> None:
+    """This function sends an email containing the API Key for the user"""
+    # The email and password are stored as environment variables and added to yagmail
+    # using os.environ.
+    # I am temporarily using Gmail SMTP but here we could potentially use SendGrid or
+    # some other email sender API.
+    yag = yagmail.SMTP(user=os.environ['MERCURY_EMAIL'], password=os.environ['MERCURY_PSSWD'])
+    yag.send(to=email, subject='MercuryDL API Key', contents=api_key)
