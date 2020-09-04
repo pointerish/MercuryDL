@@ -47,7 +47,10 @@ def is_email(email : str) -> bool:
     else:
         return False
 
-def generate_api_key():
+def generate_api_key() -> str:
+    """
+    This function generates the API key using the uuid module
+    """
     return uuid.uuid4().hex
 
 def send_apikey_email(email: str, api_key: str) -> None:
